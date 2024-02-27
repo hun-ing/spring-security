@@ -11,6 +11,7 @@ import com.huning.security.uesr.dto.UserDTO;
 import com.huning.security.uesr.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,12 +21,13 @@ public class InitialDataLoader {
   private final UserRepository userRepository;
   private final AuthorityRepository authorityRepository;
   private final CustomerRepository customerRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @PostConstruct
   public void init() {
     // 초기 데이터 생성 및 저장
-    UserDTO user = UserDTO.builder().username("test").password("test").enabled(1).build();
-    CustomerDTO customer = CustomerDTO.builder().email("test1").pwd("test1").role("admin").build();
+    UserDTO user = UserDTO.builder().username("test").password(passwordEncoder.encode("test")).enabled(1).build();
+    CustomerDTO customer = CustomerDTO.builder().email("test1").pwd(passwordEncoder.encode("test")).role("admin").build();
     AuthorityDTO authority = AuthorityDTO.builder().username("test").authority("write").build();
     userRepository.save(UserDomain.of(user).toCreateEntity());
     authorityRepository.save(AuthorityDomain.of(authority).toCreateEntity());
