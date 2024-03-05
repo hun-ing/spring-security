@@ -2,8 +2,8 @@ package com.huning.security.controller;
 
 import com.huning.security.customer.domain.CustomerDomain;
 import com.huning.security.customer.dto.CustomerDTO;
-import com.huning.security.customer.entity.CustomerEntity;
-import com.huning.security.customer.repository.CustomerRepository;
+import com.huning.security.entities.CustomerEntity;
+import com.huning.security.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.huning.security.authority.domain;
 
 import com.huning.security.authority.dto.AuthorityDTO;
-import com.huning.security.authority.entity.AuthorityEntity;
+import com.huning.security.entities.AuthorityEntity;
 import lombok.Getter;
 
 

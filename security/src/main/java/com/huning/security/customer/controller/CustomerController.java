@@ -1,6 +1,6 @@
 package com.huning.security.customer.controller;
 
-import com.huning.security.customer.repository.CustomerRepository;
+import com.huning.security.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

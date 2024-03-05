@@ -1,4 +1,4 @@
-package com.huning.security.customer.dto;
+package com.huning.security.cards.dto;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDTO {
+public class CardDTO {
 
+  private Long cardId;
+  private String cardNumber;
   private Long customerId;
-  private String name;
-  private String email;
-  private String mobileNumber;
-  private String pwd;
-  private String role;
+  private String cardType;
+  private int totalLimit;
+  private int amountUsed;
+  private int availableAmount;
   private LocalDateTime createDt;
 }

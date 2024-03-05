@@ -1,7 +1,7 @@
 package com.huning.security.config;
 
-import com.huning.security.customer.entity.CustomerEntity;
-import com.huning.security.customer.repository.CustomerRepository;
+import com.huning.security.entities.CustomerEntity;
+import com.huning.security.repositories.CustomerRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

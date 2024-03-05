@@ -1,4 +1,4 @@
-package com.huning.security.customer.dto;
+package com.huning.security.contact_messages.dto;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -10,13 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDTO {
+public class ContactMessageDTO {
 
-  private Long customerId;
-  private String name;
-  private String email;
-  private String mobileNumber;
-  private String pwd;
-  private String role;
+  private String contactId;
+  private String contactName;
+  private String contactEmail;
+  private String subject;
+  private String message;
   private LocalDateTime createDt;
 }
