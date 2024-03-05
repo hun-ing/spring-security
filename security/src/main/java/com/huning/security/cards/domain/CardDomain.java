@@ -11,7 +11,6 @@ public class CardDomain {
 
   private final Long cardId;
   private final String cardNumber;
-  private final Long customerId;
   private final String cardType;
   private final int totalLimit;
   private final int amountUsed;
@@ -21,7 +20,6 @@ public class CardDomain {
   private CardDomain(CardDTO dto) {
     this.cardId = dto.getCardId();
     this.cardNumber = dto.getCardNumber();
-    this.customerId = dto.getCustomerId();
     this.cardType = dto.getCardType();
     this.totalLimit = dto.getTotalLimit();
     this.amountUsed = dto.getAmountUsed();
@@ -37,7 +35,6 @@ public class CardDomain {
     return CardEntity.builder()
       .cardId(cardId)
       .cardNumber(cardNumber)
-      .customerId(customerId)
       .cardType(cardType)
       .totalLimit(totalLimit)
       .amountUsed(amountUsed)

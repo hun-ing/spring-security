@@ -24,18 +24,6 @@ public class LoginController {
     HttpStatus status = HttpStatus.CREATED;
     String msg = null;
 
-    try {
-      String encodedPwd = passwordEncoder.encode(requestDTO.getPwd());
-      requestDTO.setPwd(encodedPwd);
-      CustomerEntity customer = customerRepository.save(CustomerDomain.of(requestDTO).toCreateEntity());
-      if (customer.getId() > 0) {
-        msg = "Given user details are successfully registered";
-      }
-    } catch (Exception ex) {
-      status = HttpStatus.INTERNAL_SERVER_ERROR;
-      msg = "An exception occured due to" + ex.getMessage();
-    }
-
     return ResponseEntity.status(status).body(msg);
   }
 }

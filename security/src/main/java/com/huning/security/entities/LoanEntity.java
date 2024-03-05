@@ -36,6 +36,11 @@ public class LoanEntity {
   private int amountPaid;
   private int outstandingAmount;
   private LocalDateTime createDt;
+
+  //==연관관계 메서드==//
+  public void setCustomer(CustomerEntity customer) {
+    this.customer = customer;
+  }
 }
 
 

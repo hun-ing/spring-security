@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NoticeDetailRepository extends JpaRepository<NoticeDetailEntity, Long> {
 
-  List<NoticeDetailEntity> findByEmail(String username);
 }

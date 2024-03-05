@@ -1,5 +1,6 @@
 package com.huning.security.cards.dto;
 
+import com.huning.security.customer.dto.CustomerDTO;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ public class CardDTO {
 
   private Long cardId;
   private String cardNumber;
-  private Long customerId;
+  private CustomerDTO customer;
   private String cardType;
   private int totalLimit;
   private int amountUsed;

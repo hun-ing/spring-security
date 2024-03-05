@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ContactMessageRepository extends JpaRepository<ContactMessageEntity, Long> {
 
-  List<ContactMessageEntity> findByEmail(String username);
 }

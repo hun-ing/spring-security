@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LoanRepository extends JpaRepository<LoanEntity, Long> {
 
-  List<LoanEntity> findByEmail(String username);
 }

@@ -30,12 +30,17 @@ public class CardEntity {
   private String cardNumber;
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "customer_id")
-  private CustomerEntity customerId;
+  private CustomerEntity customer;
   private String cardType;
   private int totalLimit;
   private int amountUsed;
   private int availableAmount;
   private LocalDateTime createDt;
+
+  //==연관관계 메서드==//
+  public void setCustomer(CustomerEntity customer) {
+    this.customer = customer;
+  }
 
 }
 
