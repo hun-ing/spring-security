@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class NoticesController {
+public class NoticeController {
 
   private final NoticeDetailRepository noticeDetailRepository;
 
