@@ -47,8 +47,6 @@ public class AccountTransactionEntity {
   public void setCustomer(CustomerEntity customer) {
     this.customer = customer;
   }
-
-
 }
 
 

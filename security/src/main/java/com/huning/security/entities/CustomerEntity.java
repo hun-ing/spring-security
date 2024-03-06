@@ -1,12 +1,19 @@
 package com.huning.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +37,33 @@ public class CustomerEntity {
   private String pwd;
   private String role;
   private LocalDateTime createDt;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "account_number")
+  private AccountEntity account; // Customer entity
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+  private List<AccountTransactionEntity> accountTransactions = new ArrayList<>();
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+  private List<CardEntity> cards = new ArrayList<>();
+
+  //==연관관계 메서드==//
+  public void setAccount(AccountEntity account) {
+    this.account = account;
+  }
+
+  public void addAccountTransaction(AccountTransactionEntity entity) {
+    this.accountTransactions.add(entity);
+    entity.setCustomer(this);
+  }
+
+  public void addCard(CardEntity entity) {
+    this.cards.add(entity);
+    entity.setCustomer(this);
+  }
 }
 
 

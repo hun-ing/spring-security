@@ -3,6 +3,7 @@ package com.huning.security.accounts.domain;
 import com.huning.security.accounts.dto.AccountDTO;
 import com.huning.security.entities.AccountEntity;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import lombok.Getter;
 
 
@@ -31,6 +32,7 @@ public class AccountDomain {
       .accountType(accountType)
       .branchAddress(branchAddress)
       .createDt(createDt)
+      .accountTransaction(new ArrayList<>())
       .build();
   }
 }

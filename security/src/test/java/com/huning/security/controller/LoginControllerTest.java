@@ -32,7 +32,7 @@ class LoginControllerTest {
 
   @BeforeEach
   void setup() {
-    this.mockMvc = MockMvcBuilders.standaloneSetup(new LoginController(customerRepository)).build();
+//    this.mockMvc = MockMvcBuilders.standaloneSetup(new LoginController(customerRepository)).build();
   }
 
   @Test

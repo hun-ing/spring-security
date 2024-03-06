@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.huning.security.repositories.ContactMessageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,10 +24,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 class ContactControllerTest {
 
   MockMvc mockMvc;
+  @Autowired
+  ContactMessageRepository repository;
 
   @BeforeEach
   void setup() {
-    this.mockMvc = MockMvcBuilders.standaloneSetup(new ContactController()).build();
+    this.mockMvc = MockMvcBuilders.standaloneSetup(new ContactController(repository)).build();
   }
 
   @Test

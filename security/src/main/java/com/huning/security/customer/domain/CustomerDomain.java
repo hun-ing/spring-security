@@ -3,6 +3,7 @@ package com.huning.security.customer.domain;
 import com.huning.security.customer.dto.CustomerDTO;
 import com.huning.security.entities.CustomerEntity;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import lombok.Getter;
 
 
@@ -40,6 +41,8 @@ public class CustomerDomain {
       .pwd(pwd)
       .role(role)
       .createDt(createDt)
+      .accountTransactions(new ArrayList<>())
+      .cards(new ArrayList<>())
       .build();
   }
 }

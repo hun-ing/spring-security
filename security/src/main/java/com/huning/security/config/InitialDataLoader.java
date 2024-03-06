@@ -13,6 +13,7 @@ import com.huning.security.entities.AccountTransactionEntity;
 import com.huning.security.entities.CardEntity;
 import com.huning.security.entities.CustomerEntity;
 import com.huning.security.entities.LoanEntity;
+import com.huning.security.entities.NoticeDetailEntity;
 import com.huning.security.loans.domain.LoanDomain;
 import com.huning.security.loans.dto.LoanDTO;
 import com.huning.security.noticedetails.domain.NoticeDetailDomain;
@@ -27,10 +28,13 @@ import com.huning.security.repositories.LoanRepository;
 import com.huning.security.repositories.NoticeDetailRepository;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -47,19 +51,8 @@ public class InitialDataLoader {
   private final PasswordEncoder passwordEncoder;
 
   @PostConstruct
+  @Transactional
   public void init() {
-    // 초기 데이터 생성 및 저장
-    CustomerDTO customerDTO1 = CustomerDTO.builder()
-        .name("test")
-        .email("test@mail.com")
-        .mobileNumber("01000000000")
-        .pwd(passwordEncoder.encode("test"))
-        .role("admin")
-        .createDt(LocalDateTime.now())
-        .build();
-
-    CustomerEntity customerEntity = customerRepository.save(
-        CustomerDomain.of(customerDTO1).toCreateEntity());
 
     AccountDTO accountDTO1 = AccountDTO.builder()
         .accountNumber(12345678L)
@@ -69,8 +62,21 @@ public class InitialDataLoader {
         .build();
 
     AccountEntity accountEntity = AccountDomain.of(accountDTO1).toCreateEntity();
-    accountEntity.setCustomer(customerEntity);
-    accountRepository.save(accountEntity);
+
+    // 초기 데이터 생성 및 저장
+    CustomerDTO customerDTO1 = CustomerDTO.builder()
+      .name("test")
+      .email("test@mail.com")
+      .mobileNumber("01000000000")
+      .pwd(passwordEncoder.encode("test"))
+      .role("admin")
+      .createDt(LocalDateTime.now())
+      .build();
+
+
+    CustomerEntity customerEntity = CustomerDomain.of(customerDTO1).toCreateEntity();
+    customerEntity.setAccount(accountEntity);
+    customerRepository.save(customerEntity);
 
     AccountTransactionDTO accountTransactionDTO1 = AccountTransactionDTO.builder()
         .transactionId(String.valueOf(UUID.randomUUID()))
@@ -145,18 +151,18 @@ public class InitialDataLoader {
     AccountTransactionEntity accountTransaction6 = AccountTransactionDomain.of(
         accountTransactionDTO6).toCreateEntity();
 
-    accountTransaction1.setAccount(accountEntity);
-    accountTransaction1.setCustomer(customerEntity);
-    accountTransaction2.setAccount(accountEntity);
-    accountTransaction2.setCustomer(customerEntity);
-    accountTransaction3.setAccount(accountEntity);
-    accountTransaction3.setCustomer(customerEntity);
-    accountTransaction4.setAccount(accountEntity);
-    accountTransaction4.setCustomer(customerEntity);
-    accountTransaction5.setAccount(accountEntity);
-    accountTransaction5.setCustomer(customerEntity);
-    accountTransaction6.setAccount(accountEntity);
-    accountTransaction6.setCustomer(customerEntity);
+    customerEntity.addAccountTransaction(accountTransaction1);
+    accountEntity.addAccountTransaction(accountTransaction1);
+    customerEntity.addAccountTransaction(accountTransaction2);
+    accountEntity.addAccountTransaction(accountTransaction2);
+    customerEntity.addAccountTransaction(accountTransaction3);
+    accountEntity.addAccountTransaction(accountTransaction3);
+    customerEntity.addAccountTransaction(accountTransaction4);
+    accountEntity.addAccountTransaction(accountTransaction4);
+    customerEntity.addAccountTransaction(accountTransaction5);
+    accountEntity.addAccountTransaction(accountTransaction5);
+    customerEntity.addAccountTransaction(accountTransaction6);
+    accountEntity.addAccountTransaction(accountTransaction6);
 
     accountTransactionRepository.save(accountTransaction1);
     accountTransactionRepository.save(accountTransaction2);
@@ -247,9 +253,9 @@ public class InitialDataLoader {
     CardEntity cardEntity2 = CardDomain.of(cardDTO2).toCreateEntity();
     CardEntity cardEntity3 = CardDomain.of(cardDTO3).toCreateEntity();
 
-    cardEntity1.setCustomer(customerEntity);
-    cardEntity2.setCustomer(customerEntity);
-    cardEntity3.setCustomer(customerEntity);
+    customerEntity.addCard(cardEntity1);
+    customerEntity.addCard(cardEntity2);
+    customerEntity.addCard(cardEntity3);
 
     cardRepository.save(cardEntity1);
     cardRepository.save(cardEntity2);
