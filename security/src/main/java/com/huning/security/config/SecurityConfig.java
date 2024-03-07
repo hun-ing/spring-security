@@ -42,6 +42,9 @@ public class SecurityConfig {
         .ignoringRequestMatchers("/contact", "/register")
       )
       .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+      .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+      .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+      .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
       .authorizeHttpRequests((authorize) ->
         authorize
 
