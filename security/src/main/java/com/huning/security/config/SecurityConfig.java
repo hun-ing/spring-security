@@ -1,9 +1,17 @@
 package com.huning.security.config;
 
+import com.huning.security.constants.SecurityConstants;
+import com.huning.security.filters.AuthoritiesLoggingAfterFilter;
+import com.huning.security.filters.AuthoritiesLoggingAtFilter;
+import com.huning.security.filters.CsrfCookieFilter;
+import com.huning.security.filters.JWTTokenGeneratorFilter;
+import com.huning.security.filters.JWTTokenValidatorFilter;
+import com.huning.security.filters.RequestValidationBeforeFilter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,8 +41,7 @@ public class SecurityConfig {
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http
-      .securityContext((context) -> context.requireExplicitSave(false))
-      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //      .csrf(AbstractHttpConfigurer::disable)
       .csrf((csrf) -> csrf
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -42,9 +49,11 @@ public class SecurityConfig {
         .ignoringRequestMatchers("/contact", "/register")
       )
       .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+      .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
       .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
       .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
       .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+      .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
       .authorizeHttpRequests((authorize) ->
         authorize
 
@@ -71,6 +80,7 @@ public class SecurityConfig {
     configuration.setAllowedMethods(List.of("*"));
     configuration.setAllowCredentials(true);
     configuration.setAllowedHeaders(List.of("*"));
+    configuration.setExposedHeaders(List.of(SecurityConstants.JWT_HEADER));
     configuration.setMaxAge(3600L);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
