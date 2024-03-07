@@ -1,6 +1,7 @@
 package com.huning.security.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @ContextConfiguration
@@ -38,8 +40,17 @@ class LoginControllerTest {
   private PasswordEncoder passwordEncoder;;
 
   @BeforeEach
+  @DisplayName("컨트롤러만 테스트한다.")
   void setup() {
-    this.mockMvc = MockMvcBuilders.standaloneSetup(new LoginController(customerRepository, passwordEncoder)).build();
+//    this.mockMvc = MockMvcBuilders.standaloneSetup(new LoginController(customerRepository, passwordEncoder)).build();
+  }
+
+  @BeforeEach
+  @DisplayName("스프링 구성까지 포함하여 초기 세팅한다. (ex. 스프링 시큐리티")
+  public void setUp(WebApplicationContext applicationContext) {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
+      .apply(springSecurity())
+      .build();
   }
 
   @Test

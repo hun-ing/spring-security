@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,17 +31,18 @@ public class SecurityConfig {
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http
 //      .csrf(AbstractHttpConfigurer::disable)
-        .csrf((csrf) -> csrf
-            .ignoringRequestMatchers("/contact", "/register")
-
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
-        )
-        .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-        .authorizeHttpRequests((authorize) -> {
-          authorize.requestMatchers("/myAccount", "myBalance", "myLoans", "myCards").authenticated()
-              .requestMatchers("/notices", "/contact", "/register").permitAll();
-        }).formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
+      .securityContext((context) -> context.requireExplicitSave(false))
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+      .csrf((csrf) -> csrf
+        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
+        .ignoringRequestMatchers("/contact", "/register")
+      )
+      .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+      .authorizeHttpRequests((authorize) -> {
+        authorize.requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
+          .requestMatchers("/notices", "/contact", "/register").permitAll();
+      }).formLogin(Customizer.withDefaults()).httpBasic(Customizer.withDefaults());
     return http.build();
   }
 
