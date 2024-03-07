@@ -1,6 +1,6 @@
-package com.huning.security.authority.domain;
+package com.huning.security.authorities.domain;
 
-import com.huning.security.authority.dto.AuthorityDTO;
+import com.huning.security.authorities.dto.AuthorityDTO;
 import com.huning.security.entities.AuthorityEntity;
 import lombok.Getter;
 
@@ -9,13 +9,11 @@ import lombok.Getter;
 public class AuthorityDomain {
 
   private final Long id;
-  private final String username;
-  private final String authority;
+  private final String name;
 
   private AuthorityDomain(AuthorityDTO dto) {
     this.id = dto.getId();
-    this.username = dto.getUsername();
-    this.authority = dto.getAuthority();
+    this.name = dto.getName();
   }
 
   public static AuthorityDomain of(AuthorityDTO dto) {
@@ -25,8 +23,7 @@ public class AuthorityDomain {
   public AuthorityEntity toCreateEntity() {
     return AuthorityEntity.builder()
       .id(id)
-      .username(username)
-      .authority(authority)
+      .name(name)
       .build();
   }
 }

@@ -4,6 +4,7 @@ import com.huning.security.customer.dto.CustomerDTO;
 import com.huning.security.entities.CustomerEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import lombok.Getter;
 
 
@@ -43,6 +44,7 @@ public class CustomerDomain {
       .createDt(createDt)
       .accountTransactions(new ArrayList<>())
       .cards(new ArrayList<>())
+      .authorities(new HashSet<>())
       .build();
   }
 }

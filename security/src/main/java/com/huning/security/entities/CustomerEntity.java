@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +52,10 @@ public class CustomerEntity {
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
   private List<CardEntity> cards = new ArrayList<>();
 
+  @JsonIgnore
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<AuthorityEntity> authorities;
+
   //==연관관계 메서드==//
   public void setAccount(AccountEntity account) {
     this.account = account;
@@ -62,6 +68,11 @@ public class CustomerEntity {
 
   public void addCard(CardEntity entity) {
     this.cards.add(entity);
+    entity.setCustomer(this);
+  }
+
+  public void addAuthority(AuthorityEntity entity) {
+    this.authorities.add(entity);
     entity.setCustomer(this);
   }
 }

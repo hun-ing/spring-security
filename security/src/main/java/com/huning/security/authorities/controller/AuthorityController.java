@@ -1,4 +1,4 @@
-package com.huning.security.authority.controller;
+package com.huning.security.authorities.controller;
 
 import com.huning.security.repositories.AuthorityRepository;
 import lombok.RequiredArgsConstructor;
