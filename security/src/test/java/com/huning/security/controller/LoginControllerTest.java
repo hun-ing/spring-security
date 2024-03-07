@@ -1,6 +1,7 @@
 package com.huning.security.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,11 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huning.security.customer.dto.CustomerDTO;
 import com.huning.security.repositories.CustomerRepository;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
@@ -37,7 +41,8 @@ class LoginControllerTest {
   private CustomerRepository customerRepository;
 
   @Autowired
-  private PasswordEncoder passwordEncoder;;
+  private PasswordEncoder passwordEncoder;
+  ;
 
   @BeforeEach
   @DisplayName("컨트롤러만 테스트한다.")
@@ -96,5 +101,19 @@ class LoginControllerTest {
     String content = result.getResponse().getContentAsString();
 
     assertThat(content).contains("An exception occurred due to ");
+  }
+
+  @Test
+  @DisplayName("로그인 ")
+  void test3() throws Exception {
+    mockMvc.perform(
+        post("/login")
+          .with(csrf())
+          .accept(MediaType.TEXT_HTML)
+          .param("username", "test@mail.com")
+          .param("password", "test")
+      )
+      .andDo(print())
+      .andExpect(status().is3xxRedirection());
   }
 }

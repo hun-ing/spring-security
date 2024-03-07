@@ -330,34 +330,31 @@ public class InitialDataLoader {
     noticeDetailRepository.save(NoticeDetailDomain.of(noticeDetailDTO5).toCreateEntity());
     noticeDetailRepository.save(NoticeDetailDomain.of(noticeDetailDTO6).toCreateEntity());
 
-    AuthorityDTO authorityDTO1 = AuthorityDTO.builder().name("VIEWACCOUNT").build();
-    AuthorityDTO authorityDTO2 = AuthorityDTO.builder().name("VIEWCARDS").build();
-    AuthorityDTO authorityDTO3 = AuthorityDTO.builder().name("VIEWLOANS").build();
-    AuthorityDTO authorityDTO4 = AuthorityDTO.builder().name("VIEWBALANCE").build();
+//    AuthorityDTO authorityDTO1 = AuthorityDTO.builder().name("VIEWACCOUNT").build();
+//    AuthorityDTO authorityDTO2 = AuthorityDTO.builder().name("VIEWCARDS").build();
+//    AuthorityDTO authorityDTO3 = AuthorityDTO.builder().name("VIEWLOANS").build();
+//    AuthorityDTO authorityDTO4 = AuthorityDTO.builder().name("VIEWBALANCE").build();
+//    AuthorityEntity authorityEntity1 = AuthorityDomain.of(authorityDTO1).toCreateEntity();
+//    AuthorityEntity authorityEntity2 = AuthorityDomain.of(authorityDTO2).toCreateEntity();
+//    AuthorityEntity authorityEntity3 = AuthorityDomain.of(authorityDTO3).toCreateEntity();
+//    AuthorityEntity authorityEntity4 = AuthorityDomain.of(authorityDTO4).toCreateEntity();
+//    customerEntity.addAuthority(authorityEntity1);
+//    customerEntity.addAuthority(authorityEntity2);
+//    customerEntity.addAuthority(authorityEntity3);
+//    customerEntity.addAuthority(authorityEntity4);
+//    authorityRepository.save(authorityEntity1);
+//    authorityRepository.save(authorityEntity2);
+//    authorityRepository.save(authorityEntity3);
+//    authorityRepository.save(authorityEntity4);
 
-    AuthorityEntity authorityEntity1 = AuthorityDomain.of(authorityDTO1).toCreateEntity();
-    AuthorityEntity authorityEntity2 = AuthorityDomain.of(authorityDTO2).toCreateEntity();
-    AuthorityEntity authorityEntity3 = AuthorityDomain.of(authorityDTO3).toCreateEntity();
-    AuthorityEntity authorityEntity4 = AuthorityDomain.of(authorityDTO4).toCreateEntity();
-
-    customerEntity.addAuthority(authorityEntity1);
-    customerEntity.addAuthority(authorityEntity2);
-    customerEntity.addAuthority(authorityEntity3);
-    customerEntity.addAuthority(authorityEntity4);
-
-    authorityRepository.save(authorityEntity1);
-    authorityRepository.save(authorityEntity2);
-    authorityRepository.save(authorityEntity3);
-    authorityRepository.save(authorityEntity4);
-
-//    AuthorityDTO authorityDTO5 = AuthorityDTO.builder().name("ROLE_USER").build();
-//    AuthorityDTO authorityDTO6 = AuthorityDTO.builder().name("ROLE_ADMIN").build();
-//    AuthorityEntity authorityEntity5 = AuthorityDomain.of(authorityDTO5).toCreateEntity();
-//    AuthorityEntity authorityEntity6 = AuthorityDomain.of(authorityDTO6).toCreateEntity();
-//    customerEntity.addAuthority(authorityEntity5);
-//    customerEntity.addAuthority(authorityEntity6);
-//    authorityRepository.save(authorityEntity5);
-//    authorityRepository.save(authorityEntity6);
+    AuthorityDTO authorityDTO5 = AuthorityDTO.builder().name("ROLE_USER").build();
+    AuthorityDTO authorityDTO6 = AuthorityDTO.builder().name("ROLE_ADMIN").build();
+    AuthorityEntity authorityEntity5 = AuthorityDomain.of(authorityDTO5).toCreateEntity();
+    AuthorityEntity authorityEntity6 = AuthorityDomain.of(authorityDTO6).toCreateEntity();
+    customerEntity.addAuthority(authorityEntity5);
+    customerEntity.addAuthority(authorityEntity6);
+    authorityRepository.save(authorityEntity5);
+    authorityRepository.save(authorityEntity6);
 
 
   }

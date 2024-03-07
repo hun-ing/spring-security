@@ -40,15 +40,15 @@ public class CsrfTests {
 
   @Test
   public void test() throws Exception {
-    MvcResult mvcResult1 = this.mockMvc.perform(get("/"))
-        .andDo(print())
-        .andReturn();
-
-    String CSRF_VALUE = Objects.requireNonNull(mvcResult1.getResponse().getCookie("XSRF-TOKEN")).getValue();
+//    MvcResult mvcResult1 = this.mockMvc.perform(get("/"))
+//        .andDo(print())
+//        .andReturn();
+//
+//    String CSRF_VALUE = Objects.requireNonNull(mvcResult1.getResponse().getCookie("XSRF-TOKEN")).getValue();
 
     this.mockMvc.perform(post("/login")
-            .accept(MediaType.TEXT_HTML)
-            .header("X-XSRF-TOKEN", CSRF_VALUE)
+            .accept(MediaType.TEXT_HTML).with(csrf())
+//            .header("X-XSRF-TOKEN", CSRF_VALUE)
             .param("username", "test")
             .param("password", "test"))
         .andDo(print())

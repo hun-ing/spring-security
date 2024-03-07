@@ -1,9 +1,12 @@
 package com.huning.security.config;
 
+import com.huning.security.entities.AuthorityEntity;
 import com.huning.security.entities.CustomerEntity;
 import com.huning.security.repositories.CustomerRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,10 +39,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException("Invalid password!");
     }
 
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(customer.getFirst().getRole()));
+    return new UsernamePasswordAuthenticationToken(username, pwd, getGrantedAuthorities(customer.getFirst().getAuthorities()));
+  }
 
-    return new UsernamePasswordAuthenticationToken(username, pwd, authorities);
+  private List<GrantedAuthority> getGrantedAuthorities(Set<AuthorityEntity> authorities) {
+    return authorities.stream()
+      .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+      .collect(Collectors.toList());
   }
 
   @Override
