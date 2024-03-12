@@ -30,4 +30,9 @@ public class NoticeController {
       return null;
     }
   }
+
+  @GetMapping("/notices/test")
+  public String test() {
+    return "test";
+  }
 }
