@@ -1,9 +1,6 @@
 package com.huning.security.config;
 
 import com.huning.security.constants.SecurityConstants;
-import com.huning.security.filters.AuthoritiesLoggingAfterFilter;
-import com.huning.security.filters.AuthoritiesLoggingAtFilter;
-import com.huning.security.filters.CsrfCookieFilter;
 import com.huning.security.filters.JWTTokenGeneratorFilter;
 import com.huning.security.filters.JWTTokenValidatorFilter;
 import com.huning.security.filters.RequestValidationBeforeFilter;
@@ -11,35 +8,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authorization.AuthenticatedAuthorizationManager;
-import org.springframework.security.authorization.AuthorityAuthorizationManager;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
-import org.springframework.security.web.access.intercept.RequestMatcherDelegatingAuthorizationManager;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.security.web.util.matcher.AndRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.AnyRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -82,9 +64,9 @@ public class SecurityConfig {
 //          .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
 //          .requestMatchers("/myLoans").hasRole("USER")
 //          .requestMatchers("/myCards").hasRole("USER")
-//          .requestMatchers("/notices").hasRole("ADMIN")
+////          .requestMatchers("/notices").hasRole("ADMIN")
 //          .requestMatchers("/", "/user").authenticated()
-//          .requestMatchers( "/contact", "/register").permitAll()
+//          .requestMatchers( "/contact", "/register", "/notices").permitAll()
 
             .anyRequest().access(authz)
       )
@@ -94,36 +76,6 @@ public class SecurityConfig {
       .httpBasic(Customizer.withDefaults())
     ;
     return http.build();
-  }
-
-  @Bean
-  AuthorizationManager<RequestAuthorizationContext> requestMatcherAuthorizationManager(
-    HandlerMappingIntrospector introspect) {
-    RequestMatcher permitAll =
-      new OrRequestMatcher(
-        new AntPathRequestMatcher("/contact"),
-        new AntPathRequestMatcher("/register"),
-        new AntPathRequestMatcher("/notices")
-      );
-    RequestMatcher authenticated =
-      new OrRequestMatcher(
-        new AntPathRequestMatcher("/"),
-        new AntPathRequestMatcher("/user")
-      );
-    RequestMatcher myAccount = new AntPathRequestMatcher("/myAccount");
-    RequestMatcher myBalance = new AntPathRequestMatcher("/myBalance");
-    RequestMatcher myLoans = new AntPathRequestMatcher("/myLoans");
-    RequestMatcher myCards = new AntPathRequestMatcher("/myCards");
-    RequestMatcher any = AnyRequestMatcher.INSTANCE;
-    RequestMatcherDelegatingAuthorizationManager manager = RequestMatcherDelegatingAuthorizationManager.builder()
-      .add(permitAll, (authentication, context) -> new AuthorizationDecision(true))
-      .add(myAccount, AuthorityAuthorizationManager.hasRole("ADMIN"))
-      .add(myBalance, AuthorityAuthorizationManager.hasAnyRole("USER", "ADMIN"))
-      .add(myLoans, AuthorityAuthorizationManager.hasRole("ADMIN"))
-      .add(myCards, AuthorityAuthorizationManager.hasRole("ADMIN"))
-      .add(authenticated, new AuthenticatedAuthorizationManager<>())
-      .build();
-    return (authentication, context) -> manager.check(authentication, context.getRequest());
   }
 
   @Bean
@@ -143,5 +95,16 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AuthorizationManagerFactoryBean authorizationManagerFactoryBean() {
+    return new AuthorizationManagerFactoryBean();
+  }
+
+  @Bean
+  public CustomAuthorizationManager openPolicyAgentAuthorizationManager()
+    throws Exception {
+    return new CustomAuthorizationManager(authorizationManagerFactoryBean().getObject());
   }
 }
