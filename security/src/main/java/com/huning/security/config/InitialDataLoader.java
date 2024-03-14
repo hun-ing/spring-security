@@ -63,7 +63,7 @@ public class InitialDataLoader {
   private final PageAuthorityRepository pageAuthorityRepository;
   private final PasswordEncoder passwordEncoder;
 
-  @PostConstruct
+//  @PostConstruct
   @Transactional
   public void init() {
 

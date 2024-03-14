@@ -24,9 +24,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class PageAuthorityEntity {
 
-  // account entity
-  // customer entity
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String pageAuthorityId;
