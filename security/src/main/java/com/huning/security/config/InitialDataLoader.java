@@ -17,10 +17,16 @@ import com.huning.security.entities.CardEntity;
 import com.huning.security.entities.CustomerEntity;
 import com.huning.security.entities.LoanEntity;
 import com.huning.security.entities.NoticeDetailEntity;
+import com.huning.security.entities.PageAuthorityEntity;
+import com.huning.security.entities.PageEntity;
 import com.huning.security.loans.domain.LoanDomain;
 import com.huning.security.loans.dto.LoanDTO;
 import com.huning.security.noticedetails.domain.NoticeDetailDomain;
 import com.huning.security.noticedetails.dto.NoticeDetailDTO;
+import com.huning.security.pageauthorities.domain.PageAuthorityDomain;
+import com.huning.security.pageauthorities.dto.PageAuthorityDTO;
+import com.huning.security.pages.domain.PageDomain;
+import com.huning.security.pages.dto.PageDTO;
 import com.huning.security.repositories.AccountRepository;
 import com.huning.security.repositories.AccountTransactionRepository;
 import com.huning.security.repositories.AuthorityRepository;
@@ -29,6 +35,8 @@ import com.huning.security.repositories.ContactMessageRepository;
 import com.huning.security.repositories.CustomerRepository;
 import com.huning.security.repositories.LoanRepository;
 import com.huning.security.repositories.NoticeDetailRepository;
+import com.huning.security.repositories.PageAuthorityRepository;
+import com.huning.security.repositories.PageRepository;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,6 +59,8 @@ public class InitialDataLoader {
   private final ContactMessageRepository contactMessageRepository;
   private final LoanRepository loanRepository;
   private final NoticeDetailRepository noticeDetailRepository;
+  private final PageRepository pageRepository;
+  private final PageAuthorityRepository pageAuthorityRepository;
   private final PasswordEncoder passwordEncoder;
 
   @PostConstruct
@@ -66,6 +76,13 @@ public class InitialDataLoader {
 
     AccountEntity accountEntity = AccountDomain.of(accountDTO1).toCreateEntity();
 
+    AuthorityDTO authorityDTO1 = AuthorityDTO.builder().name("ADMIN").build();
+    AuthorityEntity authorityEntity1 = AuthorityDomain.of(authorityDTO1).toCreateEntity();
+    AuthorityDTO authorityDTO2 = AuthorityDTO.builder().name("USER").build();
+    AuthorityEntity authorityEntity2 = AuthorityDomain.of(authorityDTO2).toCreateEntity();
+
+    authorityRepository.save(authorityEntity2);
+
     // 초기 데이터 생성 및 저장
     CustomerDTO customerDTO1 = CustomerDTO.builder()
       .name("test")
@@ -78,6 +95,7 @@ public class InitialDataLoader {
 
     CustomerEntity customerEntity = CustomerDomain.of(customerDTO1).toCreateEntity();
     customerEntity.setAccount(accountEntity);
+    customerEntity.setAuthority(authorityEntity1);
     customerRepository.save(customerEntity);
 
     AccountTransactionDTO accountTransactionDTO1 = AccountTransactionDTO.builder()
@@ -330,32 +348,84 @@ public class InitialDataLoader {
     noticeDetailRepository.save(NoticeDetailDomain.of(noticeDetailDTO5).toCreateEntity());
     noticeDetailRepository.save(NoticeDetailDomain.of(noticeDetailDTO6).toCreateEntity());
 
-//    AuthorityDTO authorityDTO1 = AuthorityDTO.builder().name("VIEWACCOUNT").build();
-//    AuthorityDTO authorityDTO2 = AuthorityDTO.builder().name("VIEWCARDS").build();
-//    AuthorityDTO authorityDTO3 = AuthorityDTO.builder().name("VIEWLOANS").build();
-//    AuthorityDTO authorityDTO4 = AuthorityDTO.builder().name("VIEWBALANCE").build();
-//    AuthorityEntity authorityEntity1 = AuthorityDomain.of(authorityDTO1).toCreateEntity();
-//    AuthorityEntity authorityEntity2 = AuthorityDomain.of(authorityDTO2).toCreateEntity();
-//    AuthorityEntity authorityEntity3 = AuthorityDomain.of(authorityDTO3).toCreateEntity();
-//    AuthorityEntity authorityEntity4 = AuthorityDomain.of(authorityDTO4).toCreateEntity();
-//    customerEntity.addAuthority(authorityEntity1);
-//    customerEntity.addAuthority(authorityEntity2);
-//    customerEntity.addAuthority(authorityEntity3);
-//    customerEntity.addAuthority(authorityEntity4);
-//    authorityRepository.save(authorityEntity1);
-//    authorityRepository.save(authorityEntity2);
-//    authorityRepository.save(authorityEntity3);
-//    authorityRepository.save(authorityEntity4);
+    PageDTO pageDTO1 = PageDTO.builder().pageName("내 계좌").pageUrl("/myAccount/**").build();
+    PageDTO pageDTO2 = PageDTO.builder().pageName("내 잔고").pageUrl("/myBalance/**").build();
+    PageDTO pageDTO3 = PageDTO.builder().pageName("내 대출").pageUrl("/myLoans/**").build();
+    PageDTO pageDTO4 = PageDTO.builder().pageName("내 카드").pageUrl("/myCards/**").build();
+    PageDTO pageDTO5 = PageDTO.builder().pageName("공지사항").pageUrl("/notices/**").build();
+    PageDTO pageDTO6 = PageDTO.builder().pageName("가입").pageUrl("/register/**").build();
+    PageDTO pageDTO7 = PageDTO.builder().pageName("접근").pageUrl("/contact/**").build();
 
-    AuthorityDTO authorityDTO5 = AuthorityDTO.builder().name("ROLE_USER").build();
-    AuthorityDTO authorityDTO6 = AuthorityDTO.builder().name("ROLE_ADMIN").build();
-    AuthorityEntity authorityEntity5 = AuthorityDomain.of(authorityDTO5).toCreateEntity();
-    AuthorityEntity authorityEntity6 = AuthorityDomain.of(authorityDTO6).toCreateEntity();
-    customerEntity.addAuthority(authorityEntity5);
-    customerEntity.addAuthority(authorityEntity6);
-    authorityRepository.save(authorityEntity5);
-    authorityRepository.save(authorityEntity6);
+    PageEntity pageEntity1 = pageRepository.save(PageDomain.of(pageDTO1).toCreateEntity());
+    PageEntity pageEntity2 = pageRepository.save(PageDomain.of(pageDTO2).toCreateEntity());
+    PageEntity pageEntity3 = pageRepository.save(PageDomain.of(pageDTO3).toCreateEntity());
+    PageEntity pageEntity4 = pageRepository.save(PageDomain.of(pageDTO4).toCreateEntity());
+    PageEntity pageEntity5 = pageRepository.save(PageDomain.of(pageDTO5).toCreateEntity());
+    PageEntity pageEntity6 = pageRepository.save(PageDomain.of(pageDTO6).toCreateEntity());
+    PageEntity pageEntity7 = pageRepository.save(PageDomain.of(pageDTO7).toCreateEntity());
 
+    PageAuthorityDTO pageAuthorityDTO = PageAuthorityDTO.builder().build();
+    PageAuthorityEntity pageAuthorityEntity1 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity2 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity3 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity4 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity5 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity6 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity7 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
 
+    PageAuthorityEntity pageAuthorityEntity8 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity9 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity10 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+    PageAuthorityEntity pageAuthorityEntity11 = PageAuthorityDomain.of(pageAuthorityDTO)
+      .toCreateEntity();
+
+    authorityEntity1.addPageAuthority(pageAuthorityEntity1);
+    authorityEntity1.addPageAuthority(pageAuthorityEntity2);
+    authorityEntity1.addPageAuthority(pageAuthorityEntity3);
+    authorityEntity1.addPageAuthority(pageAuthorityEntity4);
+    authorityEntity1.addPageAuthority(pageAuthorityEntity5);
+    authorityEntity1.addPageAuthority(pageAuthorityEntity6);
+    authorityEntity1.addPageAuthority(pageAuthorityEntity7);
+
+    authorityEntity2.addPageAuthority(pageAuthorityEntity8);
+    authorityEntity2.addPageAuthority(pageAuthorityEntity9);
+    authorityEntity2.addPageAuthority(pageAuthorityEntity10);
+    authorityEntity2.addPageAuthority(pageAuthorityEntity11);
+
+    pageEntity1.addPageAuthority(pageAuthorityEntity1);
+    pageEntity2.addPageAuthority(pageAuthorityEntity2);
+    pageEntity3.addPageAuthority(pageAuthorityEntity3);
+    pageEntity4.addPageAuthority(pageAuthorityEntity4);
+//    pageEntity5.addPageAuthority(pageAuthorityEntity5);
+    pageEntity6.addPageAuthority(pageAuthorityEntity6);
+    pageEntity7.addPageAuthority(pageAuthorityEntity7);
+
+    pageEntity4.addPageAuthority(pageAuthorityEntity8);
+    pageEntity5.addPageAuthority(pageAuthorityEntity9);
+    pageEntity6.addPageAuthority(pageAuthorityEntity10);
+    pageEntity7.addPageAuthority(pageAuthorityEntity11);
+
+    pageAuthorityRepository.save(pageAuthorityEntity1);
+    pageAuthorityRepository.save(pageAuthorityEntity2);
+    pageAuthorityRepository.save(pageAuthorityEntity3);
+    pageAuthorityRepository.save(pageAuthorityEntity4);
+//    pageAuthorityRepository.save(pageAuthorityEntity5);
+    pageAuthorityRepository.save(pageAuthorityEntity6);
+    pageAuthorityRepository.save(pageAuthorityEntity7);
+
+    pageAuthorityRepository.save(pageAuthorityEntity8);
+    pageAuthorityRepository.save(pageAuthorityEntity9);
+    pageAuthorityRepository.save(pageAuthorityEntity10);
+    pageAuthorityRepository.save(pageAuthorityEntity11);
   }
 }

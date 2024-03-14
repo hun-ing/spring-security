@@ -32,7 +32,7 @@ public class AccountDomain {
       .accountType(accountType)
       .branchAddress(branchAddress)
       .createDt(createDt)
-      .accountTransaction(new ArrayList<>())
+      .accountTransactions(new ArrayList<>())
       .build();
   }
 }

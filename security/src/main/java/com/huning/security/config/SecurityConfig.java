@@ -4,12 +4,16 @@ import com.huning.security.constants.SecurityConstants;
 import com.huning.security.filters.JWTTokenGeneratorFilter;
 import com.huning.security.filters.JWTTokenValidatorFilter;
 import com.huning.security.filters.RequestValidationBeforeFilter;
+import com.huning.security.pages.service.PageService;
+import com.huning.security.repositories.PageRepository;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -25,7 +29,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final PageService pageService;
 
   @Value("${spring.security.debug:true}")
   boolean webSecurityDebug;
@@ -98,13 +106,15 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthorizationManagerFactoryBean authorizationManagerFactoryBean() {
-    return new AuthorizationManagerFactoryBean();
+  public CustomAuthorizationManager customAuthorizationManager()
+    throws Exception {
+    return new CustomAuthorizationManager(authorizationManagerFactoryBean().getObject());
   }
 
   @Bean
-  public CustomAuthorizationManager openPolicyAgentAuthorizationManager()
-    throws Exception {
-    return new CustomAuthorizationManager(authorizationManagerFactoryBean().getObject());
+  public AuthorizationManagerFactoryBean authorizationManagerFactoryBean() {
+    AuthorizationManagerFactoryBean authorizationManagerFactoryBean = new AuthorizationManagerFactoryBean();
+    authorizationManagerFactoryBean.setPageService(pageService);
+    return authorizationManagerFactoryBean;
   }
 }

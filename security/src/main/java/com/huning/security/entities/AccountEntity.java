@@ -37,16 +37,16 @@ public class AccountEntity {
 
   @JsonIgnore
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-  private List<AccountTransactionEntity> accountTransaction = new ArrayList<>();
+  private List<AccountTransactionEntity> accountTransactions = new ArrayList<>();
 
   //==연관관계 메서드==//
   public void setCustomer(CustomerEntity customer) {
     this.customer = customer;
   }
 
-  public void addAccountTransaction(AccountTransactionEntity accountTransaction) {
-    this.accountTransaction.add(accountTransaction);
-    accountTransaction.setAccount(this);
+  public void addAccountTransaction(AccountTransactionEntity entity) {
+    this.accountTransactions.add(entity);
+    entity.setAccount(this);
   }
 }
 

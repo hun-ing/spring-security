@@ -24,6 +24,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   private final CustomerRepository customerRepository;
   private final PasswordEncoder passwordEncoder;
+  private static final String ROLE_PREFIX ="ROLE_";
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -39,13 +40,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException("Invalid password!");
     }
 
-    return new UsernamePasswordAuthenticationToken(username, pwd, getGrantedAuthorities(customer.getFirst().getAuthorities()));
+    return new UsernamePasswordAuthenticationToken(username, pwd,
+      getGrantedAuthorities(customer.getFirst().getAuthority()));
   }
 
-  private List<GrantedAuthority> getGrantedAuthorities(Set<AuthorityEntity> authorities) {
-    return authorities.stream()
-      .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-      .collect(Collectors.toList());
+  private List<GrantedAuthority> getGrantedAuthorities(AuthorityEntity authority) {
+    return List.of(new SimpleGrantedAuthority(ROLE_PREFIX + authority.getName()));
   }
 
   @Override

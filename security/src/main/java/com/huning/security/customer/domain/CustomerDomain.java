@@ -44,7 +44,6 @@ public class CustomerDomain {
       .createDt(createDt)
       .accountTransactions(new ArrayList<>())
       .cards(new ArrayList<>())
-      .authorities(new HashSet<>())
       .build();
   }
 }

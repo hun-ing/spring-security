@@ -2,17 +2,18 @@ package com.huning.security.authorities.domain;
 
 import com.huning.security.authorities.dto.AuthorityDTO;
 import com.huning.security.entities.AuthorityEntity;
+import java.util.ArrayList;
 import lombok.Getter;
 
 
 @Getter
 public class AuthorityDomain {
 
-  private final Long id;
+  private final Long authorityId;
   private final String name;
 
   private AuthorityDomain(AuthorityDTO dto) {
-    this.id = dto.getId();
+    this.authorityId = dto.getAuthorityId();
     this.name = dto.getName();
   }
 
@@ -22,8 +23,9 @@ public class AuthorityDomain {
 
   public AuthorityEntity toCreateEntity() {
     return AuthorityEntity.builder()
-      .id(id)
+      .authorityId(authorityId)
       .name(name)
+      .pageAuthorities(new ArrayList<>())
       .build();
   }
 }

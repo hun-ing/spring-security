@@ -11,9 +11,8 @@ import lombok.Data;
 @Builder
 public class AuthorityDTO {
 
-  private Long id;
+  private Long authorityId;
   private String name;
-  private CustomerDTO customer;
 
   public static AuthorityDTO toCreateDTO(AuthorityEntity entity) {
     if (entity == null) {
@@ -21,9 +20,8 @@ public class AuthorityDTO {
     }
 
     return AuthorityDTO.builder()
-      .id(entity.getId())
+      .authorityId(entity.getAuthorityId())
       .name(entity.getName())
-      .customer(CustomerDTO.toCreateDTO(entity.getCustomer()))
       .build();
   }
 }

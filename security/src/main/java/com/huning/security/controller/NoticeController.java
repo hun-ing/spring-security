@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ public class NoticeController {
   private final NoticeDetailRepository noticeDetailRepository;
 
   @GetMapping("/notices")
+//  @PreAuthorize("hasAuthority('permission:read')")
   public ResponseEntity<List<NoticeDetailDTO>> getNotices() {
 
     List<NoticeDetailEntity> noticeDetailEntities = noticeDetailRepository.findAllActiveNotices();

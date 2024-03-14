@@ -44,6 +44,10 @@ public class CustomerEntity {
   @JoinColumn(name = "account_number")
   private AccountEntity account; // Customer entity
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "authority_id")
+  private AuthorityEntity authority; // Customer entity
+
   @JsonIgnore
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
   private List<AccountTransactionEntity> accountTransactions = new ArrayList<>();
@@ -52,13 +56,13 @@ public class CustomerEntity {
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
   private List<CardEntity> cards = new ArrayList<>();
 
-  @JsonIgnore
-  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private Set<AuthorityEntity> authorities;
-
   //==연관관계 메서드==//
-  public void setAccount(AccountEntity account) {
-    this.account = account;
+  public void setAccount(AccountEntity entity) {
+    this.account = entity;
+  }
+
+  public void setAuthority(AuthorityEntity entity) {
+    this.authority = entity;
   }
 
   public void addAccountTransaction(AccountTransactionEntity entity) {
@@ -68,11 +72,6 @@ public class CustomerEntity {
 
   public void addCard(CardEntity entity) {
     this.cards.add(entity);
-    entity.setCustomer(this);
-  }
-
-  public void addAuthority(AuthorityEntity entity) {
-    this.authorities.add(entity);
     entity.setCustomer(this);
   }
 }
