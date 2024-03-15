@@ -63,7 +63,7 @@ public class InitialDataLoader {
   private final PageAuthorityRepository pageAuthorityRepository;
   private final PasswordEncoder passwordEncoder;
 
-//  @PostConstruct
+  @PostConstruct
   @Transactional
   public void init() {
 
@@ -81,7 +81,7 @@ public class InitialDataLoader {
     AuthorityDTO authorityDTO2 = AuthorityDTO.builder().name("USER").build();
     AuthorityEntity authorityEntity2 = AuthorityDomain.of(authorityDTO2).toCreateEntity();
 
-    authorityRepository.save(authorityEntity2);
+    authorityRepository.save(authorityEntity1);
 
     // 초기 데이터 생성 및 저장
     CustomerDTO customerDTO1 = CustomerDTO.builder()
@@ -95,7 +95,7 @@ public class InitialDataLoader {
 
     CustomerEntity customerEntity = CustomerDomain.of(customerDTO1).toCreateEntity();
     customerEntity.setAccount(accountEntity);
-    customerEntity.setAuthority(authorityEntity1);
+    customerEntity.setAuthority(authorityEntity2);
     customerRepository.save(customerEntity);
 
     AccountTransactionDTO accountTransactionDTO1 = AccountTransactionDTO.builder()

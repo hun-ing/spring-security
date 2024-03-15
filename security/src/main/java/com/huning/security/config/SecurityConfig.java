@@ -1,18 +1,27 @@
 package com.huning.security.config;
 
 import com.huning.security.constants.SecurityConstants;
+import com.huning.security.filters.AjaxAuthenticationFailureHandler;
+import com.huning.security.filters.AjaxAuthenticationSuccessHandler;
 import com.huning.security.filters.JWTTokenGeneratorFilter;
 import com.huning.security.filters.JWTTokenValidatorFilter;
 import com.huning.security.filters.RequestValidationBeforeFilter;
 import com.huning.security.pages.service.PageService;
+import com.huning.security.repositories.CustomerRepository;
 import com.huning.security.repositories.PageRepository;
+import java.security.AuthProvider;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +32,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -88,6 +99,7 @@ public class SecurityConfig {
 //      .formLogin(Customizer.withDefaults())
 //      .httpBasic(Customizer.withDefaults())
     ;
+
     return http.build();
   }
 
@@ -123,10 +135,26 @@ public class SecurityConfig {
     return authorizationManagerFactoryBean;
   }
 
-  @Bean
   public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
     CustomAuthenticationFilter ajaxLoginProcessingFilter = new CustomAuthenticationFilter();
     ajaxLoginProcessingFilter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager()); // 등록
+    ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler());
+    ajaxLoginProcessingFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler());
     return ajaxLoginProcessingFilter;
+  }
+
+  @Bean
+  public AuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
+    return new AjaxAuthenticationSuccessHandler();
+  }
+
+  @Bean
+  public AuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
+    return new AjaxAuthenticationFailureHandler();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthProvider, CustomAuthenticationProvider1 customAuthProvider1) {
+    return new ProviderManager(Arrays.asList(customAuthProvider, customAuthProvider1), null);
   }
 }
